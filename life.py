@@ -42,7 +42,7 @@ class Board(AbstractLifeGameBoard):
         for i in range(height):
             a = [0] * width
             self.board.append(a)
-        pass
+        self.generation = 0
 
     def __str__(self) -> str:
         s = ""
@@ -54,7 +54,7 @@ class Board(AbstractLifeGameBoard):
                     s += 'o'
             s += '\n'
         return s
-        pass
+
 
     def place_cell(self, row: int, col: int):
         self.board[row][col] = 1
@@ -75,9 +75,9 @@ class Board(AbstractLifeGameBoard):
                 else:
                     if count == 3:
                         a.append([i, j])
-        pass
-        for i in range(len(a)):
-            self.toggle_cell(a[i][0], a[i][1])
+        for coords in a:
+            self.toggle_cell(coords[0], coords[1])
+        self.generation += 1
 
     def count_alive(self, row: int, col: int) -> int:
         count = 0
@@ -89,11 +89,9 @@ class Board(AbstractLifeGameBoard):
         return count
 
     def is_alive(self, row: int, col: int) -> bool:
-        if row < 0 or col < 0 or row > 2 or col > 2:
+        if row < 0 or col < 0 or row > len(self.board) - 1 or col > len (self.board[0]) - 1:
             return False
-        if self.board[row][col] == 1:
-            return True
-        return False
+        return bool(self.board[row][col])
         pass
 
 
@@ -105,6 +103,6 @@ if __name__ == "__main__":
         board.place_cell(1, i)
     for i in range(100):
 
-        print (board)
+        print(board)
         board.next()
         sleep(0.5)
