@@ -37,14 +37,17 @@ class AbstractLifeGameBoard(ABC):
 
 
 class Board(AbstractLifeGameBoard):
-    def __init__(self, width: int = 3, height: int = 3):
-        self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    def __init__(self, width: int, height: int):
+        self.board = []
+        for i in range(height):
+            a = [0] * width
+            self.board.append(a)
         pass
 
     def __str__(self) -> str:
         s = ""
-        for i in range(3):
-            for j in range(3):
+        for i in range(len (self.board)):
+            for j in range(len (self.board[0])):
                 if self.board[i][j] == 0:
                     s += '.'
                 else:
@@ -63,8 +66,8 @@ class Board(AbstractLifeGameBoard):
 
     def next(self) -> None:
         a = []
-        for i in range(3):
-            for j in range(3):
+        for i in range(len (self.board)):
+            for j in range(len(self.board[0])):
                 count = self.count_alive(i, j)
                 if self.is_alive(i, j):
                     if (count < 2) or (count > 3):
@@ -97,10 +100,11 @@ class Board(AbstractLifeGameBoard):
 c = CELL_SYMBOL = "o"
 
 if __name__ == "__main__":
-    board = Board(3, 3)
+    board = Board(120, 12)
     for i in range(3):
         board.place_cell(1, i)
     for i in range(100):
-        print(board)
+
+        print (board)
         board.next()
         sleep(0.5)
