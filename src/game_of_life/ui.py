@@ -2,7 +2,7 @@ from typing import NamedTuple
 
 from asciimatics.screen import Screen
 
-from life import Board
+from game_of_life.life import Board
 
 
 def place_glider_at_position(board, row_start, col_start):
@@ -150,4 +150,9 @@ class InterfaceController:
             self.screen.print_at(line, x_pos, y_pos + line_no)
 
 
-Screen.wrapper(InterfaceController)
+def main():
+    Screen.wrapper(InterfaceController)
+
+
+if __name__ == "__main__":
+    main()
