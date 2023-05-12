@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABC
 from time import sleep
-from collections import namedtuple
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QPushButton, QLabel
+import sys
 
 
 class AbstractLifeGameBoard(ABC):
@@ -61,21 +62,18 @@ class Board(AbstractLifeGameBoard):
         pass
 
     def next(self) -> None:
-        """Coordinates of all cells that we need to toggle"""
-        Position = namedtuple('Position', 'x y')
-        cords_to_toggle: list[Position] = []
+        a = []
         for i in range(len(self.board)):
             for j in range(len(self.board[0])):
-                coords = Position(i, j)
                 count = self.count_alive(i, j)
                 if self.is_alive(i, j):
                     if (count < 2) or (count > 3):
-                        cords_to_toggle.append(coords)
+                        a.append([i, j])
                 else:
                     if count == 3:
-                        cords_to_toggle.append(coords)
-        for coords1 in cords_to_toggle:
-            self.toggle_cell(coords1.x, coords1.y)
+                        a.append([i, j])
+        for coords in a:
+            self.toggle_cell(coords[0], coords[1])
         self.generation += 1
 
     def count_alive(self, row: int, col: int) -> int:
@@ -94,13 +92,48 @@ class Board(AbstractLifeGameBoard):
         pass
 
 
-c = CELL_SYMBOL = "o"
+class GameOfLifeGUI(QMainWindow):
+    def __init__(self, width: int, height: int):
+        super().__init__()
+        self.setWindowTitle("Game of Life")
+        self.board = Board(width, height)
+        self.initUI()
+
+    def initUI(self):
+        self.central_widget = QWidget(self)
+        self.setCentralWidget(self.central_widget)
+
+        grid_layout = QGridLayout(self.central_widget)
+
+        self.label_board = QLabel(self)
+        grid_layout.addWidget(self.label_board, 0, 0)
+
+        self.next_button = QPushButton("Next Generation", self)
+        self.next_button.clicked.connect(self.next_generation)
+        grid_layout.addWidget(self.next_button, 1, 0)
+
+        self.update_board_label()
+
+    def update_board_label(self):
+        board_str = str(self.board)
+        self.label_board.setText(board_str)
+
+    def next_generation(self):
+        self.board.next()
+        self.update_board_label()
+
+    def start_game(self):
+        for i in range(3):
+            self.board.place_cell(1, i)
+        self.update_board_label()
+
+    def run(self):
+        self.show()
+        self.start_game()
+
 
 if __name__ == "__main__":
-    board = Board(3, 3)
-    for i in range(3):
-        board.place_cell(1, i)
-    for i in range(100):
-        print (board)
-        board.next()
-        sleep(0.5)
+    app = QApplication(sys.argv)
+    game = GameOfLifeGUI(120, 12)
+    game.run()
+    sys.exit(app.exec())
