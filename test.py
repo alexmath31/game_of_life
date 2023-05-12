@@ -1,6 +1,12 @@
 from abc import abstractmethod, ABC
-from time import sleep
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QPushButton, QLabel
+from PyQt6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QGridLayout,
+    QPushButton,
+    QLabel,
+)
 import sys
 
 
@@ -49,9 +55,9 @@ class Board(AbstractLifeGameBoard):
     def __str__(self) -> str:
         rows = []
         for row in self.board:
-            row_str = ''.join('.' if cell == 0 else 'o' for cell in row)
+            row_str = "".join("." if cell == 0 else "o" for cell in row)
             rows.append(row_str)
-        return '\n'.join(rows) + '\n'
+        return "\n".join(rows) + "\n"
 
     def place_cell(self, row: int, col: int):
         self.board[row][col] = 1
@@ -86,7 +92,12 @@ class Board(AbstractLifeGameBoard):
         return count
 
     def is_alive(self, row: int, col: int) -> bool:
-        if row < 0 or col < 0 or row > len(self.board) - 1 or col > len(self.board[0]) - 1:
+        if (
+            row < 0
+            or col < 0
+            or row > len(self.board) - 1
+            or col > len(self.board[0]) - 1
+        ):
             return False
         return bool(self.board[row][col])
         pass

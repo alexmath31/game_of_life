@@ -48,9 +48,9 @@ class Board(AbstractLifeGameBoard):
     def __str__(self) -> str:
         rows = []
         for row in self.board:
-            row_str = ''.join('.' if cell == 0 else 'o' for cell in row)
+            row_str = "".join("." if cell == 0 else "o" for cell in row)
             rows.append(row_str)
-        return '\n'.join(rows) + '\n'
+        return "\n".join(rows) + "\n"
 
     def place_cell(self, row: int, col: int):
         self.board[row][col] = 1
@@ -62,7 +62,7 @@ class Board(AbstractLifeGameBoard):
 
     def next(self) -> None:
         """Coordinates of all cells that we need to toggle"""
-        Position = namedtuple('Position', 'x y')
+        Position = namedtuple("Position", "x y")
         cords_to_toggle: list[Position] = []
         for i in range(len(self.board)):
             for j in range(len(self.board[0])):
@@ -88,7 +88,12 @@ class Board(AbstractLifeGameBoard):
         return count
 
     def is_alive(self, row: int, col: int) -> bool:
-        if row < 0 or col < 0 or row > len(self.board) - 1 or col > len(self.board[0]) - 1:
+        if (
+            row < 0
+            or col < 0
+            or row > len(self.board) - 1
+            or col > len(self.board[0]) - 1
+        ):
             return False
         return bool(self.board[row][col])
         pass
@@ -101,6 +106,6 @@ if __name__ == "__main__":
     for i in range(3):
         board.place_cell(1, i)
     for i in range(100):
-        print (board)
+        print(board)
         board.next()
         sleep(0.5)
